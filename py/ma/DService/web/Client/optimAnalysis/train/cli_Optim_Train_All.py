@@ -68,25 +68,25 @@ if __name__ == "__main__":
     #     }
     # )
     #
-    # [API], 选中-数据源
-    Cli_Optmi_Train_All.process(
-        urlName="train_choiced_dataSource",
-        body={
-            "modelType": params.modelType,
-            "dataSourceName": params.trainDsName,
-        }
-    )
-
-    # # [API], 保存-模型
+    # # [API], 选中-数据源
     # Cli_Optmi_Train_All.process(
-    #     urlName="train_save_model",
+    #     urlName="train_choiced_dataSource",
     #     body={
     #         "modelType": params.modelType,
     #         "dataSourceName": params.trainDsName,
-    #         "modelName": params.modelName,
-    #         "modelParams": params.inputParams
     #     }
     # )
+
+    # [API], 保存-模型
+    Cli_Optmi_Train_All.process(
+        urlName="train_save_model",
+        body={
+            "modelType": params.modelType,
+            "dataSourceName": params.trainDsName,
+            "modelName": params.modelName,
+            "modelParams": params.inputParams
+        }
+    )
 
     # # [API], 获取-模型名称列表
     # Cli_Optmi_Train_All.process(

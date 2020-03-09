@@ -55,8 +55,8 @@ class opt_Result_Kafka_2_mqtt(object):
             for item in ResultList:
                 predictResult = {"predictResult": item}
                 print(json.dumps(predictResult))
-                # self.on_publish(conf.EMQ_TOPIC_OPT, json.dumps(predictResult), 1)
-                # time.sleep(2)
+                self.on_publish(conf.EMQ_TOPIC_OPT, json.dumps(predictResult), 1)
+                time.sleep(2)
 
     def opt_compute_fetch_predict_result(self, row):
         """

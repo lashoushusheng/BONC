@@ -53,7 +53,7 @@ if __name__ == "__main__":
     #         "modelType": params.modelType
     #     }
     # )
-    #
+
     # [API], 停止当前任务
     Cli_Optmi_Predict_All.process(
         urlName="predict_current_task_stop",
@@ -63,15 +63,15 @@ if __name__ == "__main__":
         }
     )
 
-    # [API], 分析任务提交
-    Cli_Optmi_Predict_All.process(
-        urlName="predict_task_commit",
-        body={
-            "modelType": params.modelType,
-            "modelName": params.modelName,
-            "predictDataSourceName": params.predDsName,
-        }
-    )
+    # # [API], 分析任务提交
+    # Cli_Optmi_Predict_All.process(
+    #     urlName="predict_task_commit",
+    #     body={
+    #         "modelType": params.modelType,
+    #         "modelName": params.modelName,
+    #         "predictDataSourceName": params.predDsName,
+    #     }
+    # )
 
     # [API], 查询-分析结果
     # Cli_Optmi_Predict_All.process(

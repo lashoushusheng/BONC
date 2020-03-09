@@ -175,7 +175,7 @@ object Mysql_MaPredict {
 	 */
 	def main(args: Array[String]): Unit = {
 //		this.get_undo_tasks()
-		val item: Item_MaPredict = this.get_undo_tasks_by_modelName("多氟多2点_all")
+		val item: Item_MaPredict = this.get_undo_tasks_by_modelName("多氟多1点")
 		println(item)
 	}
 }
