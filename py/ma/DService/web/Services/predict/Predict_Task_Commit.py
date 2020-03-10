@@ -106,7 +106,7 @@ class Predict_Commit_Task_Handler(DataServiceBaseHandler):
 
     def start_predict_compute(self, modelName):
         # 检查当前是否有任务在执行
-        val = os.popen('jps | grep MaPredict_Main_opt | wc -l').read()  # 执行结果包含在val中
+        val = os.popen('jps | grep maPredict | wc -l').read()  # 执行结果包含在val中
         if int(val) > 0:
             self.write(json.dumps({
                 "errorNo": -1,
@@ -114,7 +114,9 @@ class Predict_Commit_Task_Handler(DataServiceBaseHandler):
             }))
             return
 
-        res = os.system(f"nohup java -cp {conf.OPT_JAR_DIR} rtcompute.RtcCompute.MaPredict_Main_opt {modelName} > /root/works/ibin/ma16_out/MaPredict_Main_opt>&1 &")
+        # res = os.system(f"nohup java -cp {conf.OPT_PREDICT_JAR_DIR} rtcompute.RtcCompute.MaPredict_Main_opt {
+        # modelName} > /root/works/ibin/ma16_out/MaPredict_Main_opt>&1 &")
+        res = os.system(f"nohup java -jar {conf.OPT_PREDICT_JAR_DIR}/{conf.OPT_PREDICT_JAR_NAME}.jar {modelName} > {conf.OPT_PREDICT_OUT} 2>&1 &")
         if res == 0:
             self.write(json.dumps({
                 "errorNo": 0,

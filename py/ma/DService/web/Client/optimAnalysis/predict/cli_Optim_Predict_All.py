@@ -54,14 +54,14 @@ if __name__ == "__main__":
     #     }
     # )
 
-    # [API], 停止当前任务
-    Cli_Optmi_Predict_All.process(
-        urlName="predict_current_task_stop",
-        body={
-            "modelType": params.modelType,
-            "modelName": params.modelName
-        }
-    )
+    # # [API], 停止当前任务
+    # Cli_Optmi_Predict_All.process(
+    #     urlName="predict_current_task_stop",
+    #     body={
+    #         "modelType": params.modelType,
+    #         "modelName": params.modelName
+    #     }
+    # )
 
     # [API], 分析任务提交
     Cli_Optmi_Predict_All.process(

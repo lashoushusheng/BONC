@@ -30,14 +30,14 @@ class Predict_Current_Task_Stop_Handler(DataServiceBaseHandler):
             self.write(json.dumps({"errorNo": errno, "errorMsg": errMsg}))
             return
 
-        val = os.popen('jps | grep MaPredict_Main_opt | wc -l').read()  # 执行结果包含在val中
+        val = os.popen('jps | grep maPredict | wc -l').read()  # 执行结果包含在val中
 
         if int(val) <= 0:
             self.write(json.dumps({"errorNo": 0, "errorMsg": "当前没有任务运行"}))
 
         else:
-            res = os.system("jps | grep MaPredict_Main_opt | awk '{print $1}' | xargs kill -9")
+            res = os.system("jps | grep maPredict | awk '{print $1}' | xargs kill -9")
             if res == 0:
-                self.write(json.dumps({"errorNo": 0, "errorMsg": "执行成功!"}))
+                self.write(json.dumps({"errorNo": 0, "errorMsg": "stop执行成功!"}))
             else:
-                self.write(json.dumps({"errorNo": -1, "errorMsg": "执行失败!"}))
+                self.write(json.dumps({"errorNo": -1, "errorMsg": "stop执行失败!"}))

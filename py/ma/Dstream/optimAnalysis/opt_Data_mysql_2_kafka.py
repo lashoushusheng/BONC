@@ -8,6 +8,7 @@ import time
 
 from CConfig import conf
 from DPublic.MyLog import MyLog
+from DModel.Mysql_MA_Real_time import Mysql_MA_Real_time
 
 logFname = '{}/Data_product_2_kafka.log'.format(conf.LOG_PATH)
 mylog = MyLog(logFname, level=conf.LOG_LEVEL).logger
@@ -18,11 +19,16 @@ producer = KafkaProducer(
 )
 
 
-def read_from_mysql_2_df():
-    cnx = engine.raw_connection()
-    df = pd.read_sql('SELECT * FROM dfd_ds_product limit 5', cnx)
-    if not df.empty:
-        print(df)
+def read_from_mysql_2_DataFrame():
+    try:
+        cnx = engine.raw_connection()
+        df = pd.read_sql('SELECT * FROM dfd_ds_product limit 5', cnx)
+        df.drop(['id'], axis=1, inplace=True)
+        Mysql_MA_Real_time.delete("dfd_ds_product", len(df))
+        return df
+    except Exception as e:
+        print(e)
+
 
 def send_data_2_kafka(df):
     for index, row in df.iterrows():
@@ -127,14 +133,14 @@ def send_data_2_kafka(df):
         f"{row['BFIC_3002_F03_MV']}"
 
         producer.send(conf.KAFKA_OPT_SRC_TOPIC, msg)
-        time.sleep(3)
+        time.sleep(2)
 
 
 if __name__ == '__main__':
     # df = pd.read_csv("/root/works/idata/ma16_data/origin_data/优化分析1/predic_data/多氟多_在线数据.csv")
     # print(df)
 
-    # while True:
-    #     send_data_2_kafka(df)
-    read_from_mysql_2_df()
+    while True:
+        df = read_from_mysql_2_DataFrame()
+        send_data_2_kafka(df)
 
