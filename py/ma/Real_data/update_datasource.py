@@ -4,14 +4,14 @@ from DModel.Mysql_MA_Real_time import Mysql_MA_Real_time
 from DPublic.MysqlDB import Base, db_session, engine
 from Real_data.Dfd_data_struct import dfd_columns
 from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd import Client_Soft_Params_Dfd1
-from DService.web.Client.optimAnalysis.demoParams.cli_Params_Optmi_dfd_2 import Cli_Optmi_Params_Dfd1
+from DService.web.Client.optimAnalysis.demoParams.cli_Params_Optmi_dfd_2 import Cli_Optmi_Params_Dfd_2
 import time
 import os
 
 soft_predDsDir = Client_Soft_Params_Dfd1.predDsDir
 soft_predDsFile = Client_Soft_Params_Dfd1.predDsFile
 
-opt_predDsDir = Cli_Optmi_Params_Dfd1.predDsDir
+opt_predDsDir = Cli_Optmi_Params_Dfd2.predDsDir
 opt_predDsFile = Cli_Optmi_Params_Dfd1.predDsFile
 
 

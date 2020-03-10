@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import paho.mqtt.client as mqtt
+
 from kafka import KafkaProducer
+from DPublic.MysqlDB import Base, db_session, engine, engine_dfd
 import pandas as pd
 import time
-
 
 from CConfig import conf
 from DPublic.MyLog import MyLog
@@ -17,6 +17,12 @@ producer = KafkaProducer(
     bootstrap_servers=[conf.KAFKA_URL]
 )
 
+
+def read_from_mysql_2_df():
+    cnx = engine.raw_connection()
+    df = pd.read_sql('SELECT * FROM dfd_ds_product limit 5', cnx)
+    if not df.empty:
+        print(df)
 
 def send_data_2_kafka(df):
     for index, row in df.iterrows():
@@ -125,9 +131,10 @@ def send_data_2_kafka(df):
 
 
 if __name__ == '__main__':
-    df = pd.read_csv("/root/works/idata/ma16_data/origin_data/优化分析1/predic_data/多氟多_在线数据.csv")
+    # df = pd.read_csv("/root/works/idata/ma16_data/origin_data/优化分析1/predic_data/多氟多_在线数据.csv")
     # print(df)
 
-    while True:
-        send_data_2_kafka(df)
+    # while True:
+    #     send_data_2_kafka(df)
+    read_from_mysql_2_df()
 

@@ -82,6 +82,8 @@ class opt_Result_Kafka_2_mqtt(object):
         resColumns = [i for i in columns if i not in srcColumns]
         # 结果datafream
         dfOutput = df[resColumns]
+        # sort by time asc
+        dfOutput.sort_values(by=['time'], ascending=True, inplace=True)
         # print(dfOutput)
         # print("*" * 100)
 
