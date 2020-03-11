@@ -58,6 +58,7 @@ class opt_Result_Kafka_2_mqtt(object):
                 self.on_publish(conf.EMQ_TOPIC_OPT, json.dumps(predictResult), 1)
                 time.sleep(2)
 
+
     def opt_compute_fetch_predict_result(self, row):
         """
             预测结果、输入结果，规整格式，返回给前端.

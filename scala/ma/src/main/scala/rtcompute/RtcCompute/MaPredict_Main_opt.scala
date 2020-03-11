@@ -95,26 +95,26 @@ object MaPredict_Main_opt {
 		}
 		// [Spark].
 		ssc.start()
-		ssc.awaitTermination()
+//		ssc.awaitTermination()
 		//检查间隔毫秒
-//		val checkIntervalMillis = 10000
-//		var isStopped = false
-//		while (!isStopped) {
-//			println("calling awaitTerminationOrTimeout")
-//			isStopped = ssc.awaitTerminationOrTimeout(checkIntervalMillis)
-//			if (isStopped) {
-//				println("confirmed! The streaming context is stopped. Exiting application...")
-//			} else {
-//				println("Streaming App is still running. Timeout...")
-//			}
-//			//判断文件夹是否存在
-//			checkShutdownMarker
-//			if (!isStopped && stopFlag) {
-//				println("stopping ssc right now")
-//				ssc.stop(true, false)
-//				println("ssc is stopped!!!!!!!")
-//			}
-//		}
+		val checkIntervalMillis = 10000
+		var isStopped = false
+		while (!isStopped) {
+			println("calling awaitTerminationOrTimeout")
+			isStopped = ssc.awaitTerminationOrTimeout(checkIntervalMillis)
+			if (isStopped) {
+				println("confirmed! The streaming context is stopped. Exiting application...")
+			} else {
+				println("Streaming App is still running. Timeout...")
+			}
+			//判断文件夹是否存在
+			checkShutdownMarker
+			if (!isStopped && stopFlag) {
+				println("stopping ssc right now")
+				ssc.stop(true, false)
+				println("ssc is stopped!!!!!!!")
+			}
+		}
 	}
 
 	def checkShutdownMarker: AnyVal = {

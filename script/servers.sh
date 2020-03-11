@@ -5,7 +5,7 @@ source /etc/profile
 ####### ####### ####### ####### ####### #######
 if [ $# -lt 2 ]
 then
-    echo $0 " [all | ds_web | product | update_ds]  [ps | start | stop] "
+    echo $0 " [all | ds_web | mysql_2kafka | kafka_2mqtt | train ]  [ps | start | stop] "
 exit 0
 fi
 ####### ####### ####### ####### ####### #######
@@ -54,9 +54,6 @@ kill_ps()
 }
 ####### ####### ####### ####### ####### #######
 
-
-
-
 ####### ####### ####### ####### ####### #######
 # [参数1]代表[应用].
 appName=$1
@@ -65,17 +62,17 @@ appName=$1
 actName=$2
 
 # [项目名称].
-projectName=MAnalysis
+projectName=app16
 
 
 # [App路径].
-# APP_DIR=/root/works/src/git_test/rtc/poc_MAnalysis/py/ma
 APP_DIR=/root/works/src/BONC/app16/py/ma
 
 App_ds_web_Path=${APP_DIR}/DService/web
 
-App_ds_Real_data_Path=${APP_DIR}/Real_data
+App_dstream_opt_Path=${APP_DIR}/Dstream/optimAnalysis
 
+App_train_Path=/root/works/ibin/app16_jar
 
 # [输出目录].
 Out_Dir=/root/works/idata/ma16_out
@@ -86,12 +83,9 @@ Log_Dir=/root/works/idata/ma16_log
 export PYTHONPATH=${APP_DIR}
 export BONC_MA16_PATH=/root/works/ibin
 
-
-
 # [日期].
 ymd=`date +%Y%m%d`
 ###########  ###########  ###########
-
 
 # [App名称 / python文件 / 输出].
 # 【data service】数据服务.
@@ -99,15 +93,20 @@ App_ds_web=data_service_main
 App_ds_web_PY=${App_ds_web_Path}/${App_ds_web}.py
 App_ds_web_OUT=${Out_Dir}/${App_ds_web}_${ymd}.out
 
-# 【data product】造数据
-App_data_product=Data_product
-App_data_product_PY=${App_ds_Real_data_Path}/${App_data_product}.py
-App_data_product_OUT=${Out_Dir}/${App_data_product}_${ymd}.out
+# 【mysql_2kafka】从mysql导入数据源
+App_mysql_2kafka=opt_Data_mysql_2_kafka
+App_mysql_2kafka_PY=${App_dstream_opt_Path}/${App_mysql_2kafka}.py
+App_mysql_2kafka_OUT=${Out_Dir}/${App_mysql_2kafka}_${ymd}.out
 
-# 【update_ds】更新数据源
-App_update_ds=update_datasource
-App_update_ds_PY=${App_ds_Real_data_Path}/${App_update_ds}.py
-App_update_ds_OUT=${Out_Dir}/${App_update_ds}_${ymd}.py
+# 【kafka_2mqtt】结果写入mqtt
+App_kafka_2mqtt=opt_Result_Kafka_2_mqtt
+App_kafka_2mqtt_PY=${App_dstream_opt_Path}/${App_kafka_2mqtt}.py
+App_kafka_2mqtt_OUT=${Out_Dir}/${App_kafka_2mqtt}_${ymd}.py
+
+# 【train】 训练
+App_train=maTrain_opt
+App_train_JAR=${App_train_Path}/${App_train}.jar
+App_train_OUT=${Out_Dir}/${App_train}_${ymd}.out
 
 
 case ${appName} in
@@ -121,24 +120,28 @@ all)
             moni_ps "${App_ds_web}"  "${projectName}"
             echo -e ""
 
-            moni_ps_aux "${App_data_product}" "${projectName}"
+            moni_ps_aux "${App_mysql_2kafka}" "${projectName}"
             echo -e ""
 
-            moni_ps_aux "${App_update_ds}" "${projectName}"
+            moni_ps_aux "${App_kafka_2mqtt}" "${projectName}"
+			echo -e ""
+			
+			moni_ps_aux "${App_train}" "${projectName}"
             echo "☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺"
             sleep 10
         done
     ;;
     start)
         nohup /root/anaconda3/bin/python -u  ${App_ds_web_PY} >> ${App_ds_web_OUT} 2>&1 &
-		nohup /root/anaconda3/bin/python -u  ${App_data_product_PY} >> ${App_data_product_OUT} 2>&1 &
-		nohup /root/anaconda3/bin/python -u  ${App_update_ds_PY} >> ${App_update_ds_OUT} 2>&1 &
+		nohup /root/anaconda3/bin/python -u  ${App_mysql_2kafka_PY} >> ${App_mysql_2kafka_OUT} 2>&1 &
+		nohup /root/anaconda3/bin/python -u  ${App_kafka_2mqtt_PY} >> ${App_kafka_2mqtt_OUT} 2>&1 &
+		 nohup java  -jar ${App_train_JAR} >> ${App_train_OUT} 2>&1 &
     ;;
     stop)
         kill_ps "${App_ds_web}"  "${projectName}"
-		kill_ps "${App_data_product}"  "${projectName}"
-		kill_ps "${App_update_ds}"  "${projectName}"
-
+		kill_ps "${App_mysql_2kafka}"  "${projectName}"
+		kill_ps "${App_kafka_2mqtt}"  "${projectName}"
+		kill_ps "${App_train}" "${projectName}"
     ;;
     *)
         echo -e "第[2]个参数输入错误! "
@@ -185,11 +188,11 @@ ds_web)
 ;;
 ######## ######## ########
 
-# [ 产生数据 ].
-product)
-    appName=${App_data_product}
-    pyName=${App_data_product_PY}
-    outFile=${App_data_product_OUT}
+# [ 从mysql导入数据 ].
+mysql_2kafka)
+    appName=${App_mysql_2kafka}
+    pyName=${App_mysql_2kafka_PY}
+    outFile=${App_mysql_2kafka_OUT}
 
     case ${actName} in
     ps)
@@ -221,12 +224,11 @@ product)
 ######## ######## ########
 
 ######## ######## ########
-
-# [ 更新数据源 ].
-update_ds)
-    appName=${App_update_ds}
-    pyName=${App_update_ds_PY}
-    outFile=${App_update_ds_OUT}
+# [ 结果写入mqtt ].
+kafka_2mqtt)
+    appName=${App_kafka_2mqtt}
+    pyName=${App_kafka_2mqtt_PY}
+    outFile=${App_kafka_2mqtt_OUT}
 
     case ${actName} in
     ps)
@@ -256,6 +258,42 @@ update_ds)
     esac
 ;;
 ######## ######## ########
+# [ 训练 ].
+train)
+    appName=${App_train}
+    jarName=${App_train_JAR}
+    outFile=${App_train_OUT}
+
+    case ${actName} in
+    ps)
+        while [ 1 ]
+        do
+            moni_ps "${appName}" "${projectName}"
+            echo "☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺"
+            sleep 10
+        done
+    ;;
+    start)
+        cd ${App_train_Path}
+
+        if [[ $# -eq 3 ]] && [[ $3 == "front" ]]
+        then
+            java  -jar ${jarName}
+        else
+            nohup java  -jar ${jarName} >> ${outFile} 2>&1 &
+        fi
+    ;;
+    stop)
+        kill_ps "${appName}" "${projectName}"
+    ;;
+    *)
+        echo -e "第[2]个参数输入错误! "
+        exit 0
+    ;;
+    esac
+;;
+######## ######## ########
+
 
 *)
     echo -e "第[1]个参数输入错误!"

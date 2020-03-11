@@ -46,32 +46,32 @@ if __name__ == "__main__":
     #     }
     # )
 
-    # # [API], 获取-数据源列表
-    # Cli_Optmi_Predict_All.process(
-    #     urlName="predict_get_dataSource_list",
-    #     body={
-    #         "modelType": params.modelType
-    #     }
-    # )
-
-    # # [API], 停止当前任务
-    # Cli_Optmi_Predict_All.process(
-    #     urlName="predict_current_task_stop",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "modelName": params.modelName
-    #     }
-    # )
-
-    # [API], 分析任务提交
+    # [API], 获取-数据源列表
     Cli_Optmi_Predict_All.process(
-        urlName="predict_task_commit",
+        urlName="predict_get_dataSource_list",
         body={
-            "modelType": params.modelType,
-            "modelName": params.modelName,
-            "predictDataSourceName": params.predDsName,
+            "modelType": params.modelType
         }
     )
+
+    # [API], 停止当前任务
+    Cli_Optmi_Predict_All.process(
+        urlName="predict_current_task_stop",
+        body={
+            "modelType": params.modelType,
+            "modelName": params.modelName
+        }
+    )
+
+    # # [API], 分析任务提交
+    # Cli_Optmi_Predict_All.process(
+    #     urlName="predict_task_commit",
+    #     body={
+    #         "modelType": params.modelType,
+    #         "modelName": params.modelName,
+    #         "predictDataSourceName": params.predDsName,
+    #     }
+    # )
 
     # [API], 查询-分析结果
     # Cli_Optmi_Predict_All.process(

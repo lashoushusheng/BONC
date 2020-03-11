@@ -63,9 +63,8 @@ object GlobalParams {
 	/* * * * * * *  * * * * * * *  * * * * * * *
 			[Kafka].参数.
 * * * * * * *  * * * * * * *  * * * * * * */
-	val kafka_url = "172.16.71.159:9092"
-//	val kafka_url = "192.168.100.5:9092"
-
+	val kafkaSection:Section = ini.get("kafka")
+	val kafka_url:String = kafkaSection.get("KAFKA_URL").trim
 
 	val kafka_topics = Array(
 //		"ma16_src_soft_measure"
@@ -84,7 +83,9 @@ object GlobalParams {
 * * * * * * *  * * * * * * *  * * * * * * */
 	// Streaming处理，间隔时间, 单位(秒).
 	//	val spark_stream_interval_seconds = 60      // 60秒，计算1次.
-	val spark_stream_interval_seconds = 10
+	val sparkSection:Section = ini.get("spark")
+	val spark_stream_interval_seconds:Int = sparkSection.get("INTERVAL_SECONDS").toInt
+
 	val colNames = Array("time",
 		"AFIC_3001_F03_MV",
 		"AFIC_3002_F03_MV",

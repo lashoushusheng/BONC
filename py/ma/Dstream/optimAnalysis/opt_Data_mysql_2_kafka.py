@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from kafka import KafkaProducer
-from DPublic.MysqlDB import Base, db_session, engine, engine_dfd
+from DPublic.MysqlDB import Base, db_session, engine
 import pandas as pd
 import time
 
@@ -22,7 +22,7 @@ producer = KafkaProducer(
 def read_from_mysql_2_DataFrame():
     try:
         cnx = engine.raw_connection()
-        df = pd.read_sql('SELECT * FROM dfd_ds_product limit 5', cnx)
+        df = pd.read_sql('SELECT * FROM dfd_ds_product limit 10', cnx)
         df.drop(['id'], axis=1, inplace=True)
         Mysql_MA_Real_time.delete("dfd_ds_product", len(df))
         return df

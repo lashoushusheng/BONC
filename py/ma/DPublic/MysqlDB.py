@@ -19,18 +19,6 @@ engine = create_engine(
     # pool_pre_ping=True
 )
 
-engine_dfd = create_engine(
-    'mysql://{}:{}@{}:{}/{}'.format(
-        conf.DFD_MYSQL_USER, conf.DFD_MYSQL_PASSWD, conf.DFD_MYSQL_HOST, conf.DFD_MYSQL_PORT, conf.DFD_MYSQL_DB
-    ),
-    connect_args={"charset": "utf8"},
-    echo=False,
-    pool_recycle=60,
-    pool_size=5,
-    max_overflow=10,
-    # pool_pre_ping=True
-)
-
 Base = declarative_base()
 db_session = scoped_session(
     sessionmaker(bind=engine)
