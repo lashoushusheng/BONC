@@ -19,6 +19,11 @@ object Utils {
 
 	def main(args: Array[String]): Unit = {
 		val now: String = this.now()
+		val start = this.now()
 		println(s"[$now]: ")
+		Thread.sleep(1000)
+		val end = this.now()
+		println(start)
+		println(end)
 	}
 }

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/root/works/src/BONC/app16/py/ma/Dstream/greyPredict/Grey_data_product_2_kafka.py", line 9, in <module>
+    from CConfig import conf
+ModuleNotFoundError: No module named 'CConfig'

@@ -72,9 +72,17 @@ object GlobalParams {
 		"ma16_src_opt"
 	)
 
+	val kafka_topics_soft = Array(
+				"ma16_src_soft_measure"
+	)
+
+	val kafka_topics_grey = Array(
+				"ma16_src_greyPredict"
+	)
+
 	// [写 RTC实时计算结果数据], -> topic.
-//	val kafka_rtc_result_topic = "ma16_res_soft_measure"
-//	val kafka_rtc_result_topic = "ma16_res_greyPredict"
+	val kafka_rtc_result_topic_soft = "ma16_res_soft_measure"
+	val kafka_rtc_result_topic_grey = "ma16_res_greyPredict"
 	val kafka_rtc_result_topic = "ma16_res_opt"
 
 
@@ -85,6 +93,8 @@ object GlobalParams {
 	//	val spark_stream_interval_seconds = 60      // 60秒，计算1次.
 	val sparkSection:Section = ini.get("spark")
 	val spark_stream_interval_seconds:Int = sparkSection.get("INTERVAL_SECONDS").toInt
+	val windowDuration:Int = sparkSection.get("WINDOWDURATION").toInt
+	val slideDuration:Int = sparkSection.get("SLIDEDURATION").toInt
 
 	val colNames = Array("time",
 		"AFIC_3001_F03_MV",

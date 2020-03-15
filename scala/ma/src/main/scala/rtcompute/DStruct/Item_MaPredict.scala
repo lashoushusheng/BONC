@@ -13,6 +13,7 @@ case class Item_MaPredict(
     var trainDir:String = "",   // 训练目录.
 
 		var paramOriJson:String = "", // 原始参数
+    var modelParams:String = "",
 
     var dsId:Int,               // 数据源ID.
     var dsDir:String = "",      // 数据源目录.

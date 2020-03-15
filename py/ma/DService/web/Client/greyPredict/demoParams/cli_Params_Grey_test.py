@@ -5,7 +5,8 @@ class cli_Params_Grey_test(object):
     """
     """
     modelType = "生产预警分析"
-    modelName = "生产预警分析-训练模型"
+    # modelName = "生产预警分析-训练模型"
+    modelName = "test1"
     modelNames = ["生产预警分析-训练模型"]
 
     trainDsName = "生产预警分析-训练数据"

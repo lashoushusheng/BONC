@@ -2,8 +2,8 @@ package test_demo.graypredict
 
 import java.util
 
-import InterfaceRaw.{IBGA_Model, IBGA_Model_5}
-import com.bonc.Model.GM_11_APP
+import com.bonc.interfaceRaw.IBGA_Model_5
+import com.bonc.models.GM_11_APP
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}

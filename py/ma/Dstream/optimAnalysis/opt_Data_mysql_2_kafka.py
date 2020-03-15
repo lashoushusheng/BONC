@@ -22,9 +22,10 @@ producer = KafkaProducer(
 def read_from_mysql_2_DataFrame():
     try:
         cnx = engine.raw_connection()
-        df = pd.read_sql('SELECT * FROM dfd_ds_product limit 10', cnx)
+        df = pd.read_sql('SELECT * FROM dfd_ds_product limit 6', cnx)
         df.drop(['id'], axis=1, inplace=True)
         Mysql_MA_Real_time.delete("dfd_ds_product", len(df))
+        time.sleep(30)
         return df
     except Exception as e:
         print(e)
@@ -133,7 +134,6 @@ def send_data_2_kafka(df):
         f"{row['BFIC_3002_F03_MV']}"
 
         producer.send(conf.KAFKA_OPT_SRC_TOPIC, msg)
-        time.sleep(2)
 
 
 if __name__ == '__main__':

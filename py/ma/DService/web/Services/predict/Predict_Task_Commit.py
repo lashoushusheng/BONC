@@ -116,7 +116,7 @@ class Predict_Commit_Task_Handler(DataServiceBaseHandler):
 
         # res = os.system(f"nohup java -cp {conf.OPT_PREDICT_JAR_DIR} rtcompute.RtcCompute.MaPredict_Main_opt {
         # modelName} > /root/works/ibin/ma16_out/MaPredict_Main_opt>&1 &")
-        res = os.system(f"nohup java -jar {conf.OPT_PREDICT_JAR_DIR}/{conf.OPT_PREDICT_JAR_NAME}.jar {modelName} > {conf.OPT_PREDICT_OUT} 2>&1 &")
+        res = os.system(f"nohup java -jar {conf.PREDICT_JAR_DIR}/{conf.PREDICT_JAR_NAME}.jar {modelName} > {conf.PREDICT_OUT} 2>&1 &")
         if res == 0:
             self.write(json.dumps({
                 "errorNo": 0,

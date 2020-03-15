@@ -81,6 +81,7 @@ class soft_Result_Kafka_2_mqtt(object):
         param actualValue: 实际值
         param predictionValue: 预测值
         return:
+        bug: 数据量太大无法计算
         """
         self.actualDF = self.actualDF.append(actualValue[-1], ignore_index=True)
         # 零点数据清零重新计算

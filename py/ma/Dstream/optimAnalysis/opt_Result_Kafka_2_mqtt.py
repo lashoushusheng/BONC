@@ -52,12 +52,16 @@ class opt_Result_Kafka_2_mqtt(object):
             vValue = bytes.decode(msg.value)
             ResultList = self.opt_compute_fetch_predict_result(vValue)
 
-            for item in ResultList:
-                predictResult = {"predictResult": item}
-                print(json.dumps(predictResult))
-                self.on_publish(conf.EMQ_TOPIC_OPT, json.dumps(predictResult), 1)
-                time.sleep(2)
+            # 一条一条发送
+            # for item in ResultList:
+            #     predictResult = {"predictResult": item}
+            #     print(json.dumps(predictResult))
+            #     self.on_publish(conf.EMQ_TOPIC_OPT, json.dumps(predictResult), 1)
+            #     time.sleep(2)
 
+            # 批量发送
+            predictResult = {"predictResult": ResultList}
+            self.on_publish(conf.EMQ_TOPIC_OPT, json.dumps(predictResult), 1)
 
     def opt_compute_fetch_predict_result(self, row):
         """

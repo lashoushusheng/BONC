@@ -5,7 +5,7 @@ import rtcompute.DIO.Mysql_MaTrain
 import rtcompute.DStruct.GlobalParams
 import com.bitanswer.authorization.Authentication
 import org.apache.spark.SparkContext
-
+import rtcompute.DPublic.Utils
 
 object MaTrain_Main {
 
@@ -15,20 +15,23 @@ object MaTrain_Main {
 //		Authentication.login()
 		// [Spark], 参数设置.
 		val spark: SparkSession = SparkSession.builder()
-			.master("local[2]")
+			.master("local[*]")
 			.appName("MAnalysis_train")
 			.getOrCreate()
 
 		val sc: SparkContext = spark.sparkContext
 		sc.setLogLevel(GlobalParams.sys_log_level)
 
+
 		while(true){
+			val start = Utils.now()
 			Mysql_MaTrain.trainUndoList.clear()
 
 			// [读取], 待处理训练任务.
 			Mysql_MaTrain.get_undo_tasks()
 
 			// [处理], 训练任务.
+
 			Mysql_MaTrain.trainUndoList.foreach( x =>{
 					// [ma_train表], 更新-训练状态为(0->1，未开始->进行中).
 					Mysql_MaTrain.update_train_state(
@@ -51,8 +54,12 @@ object MaTrain_Main {
 						)
 					}
 				}
+
 			)
 
+			val end = Utils.now()
+			println(start)
+			println(end)
 			// 休眠等待n秒.
 			Thread.sleep(1000 * 5)
 		}

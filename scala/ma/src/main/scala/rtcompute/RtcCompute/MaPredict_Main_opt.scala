@@ -31,7 +31,7 @@ object MaPredict_Main_opt {
 
 		// [Spark], 参数设置.
 		val spark: SparkSession = SparkSession.builder()
-			.master("local[2]")
+			.master("local[*]")
 			.appName("MAnalysis_Predict")
 			.getOrCreate()
 
@@ -64,7 +64,7 @@ object MaPredict_Main_opt {
 //		val dfd_src: DataFrame = spark.read.option("header",value = true).csv("/root/works/idata/ma16_data/origin_data/产品质量软测量/predic_data/2号软测量预测数据.csv")
 //		dfd_src.show()
 
-		val item: Item_MaPredict = Mysql_MaPredict.get_undo_tasks_by_modelName(args(0))
+		val item: Item_MaPredict = Mysql_MaPredict.get_undo_tasks(args(0))
 		MaPredict_Process.loadModel_OG(item)
 
 //		// [kafka], 取数据流.

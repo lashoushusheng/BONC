@@ -5,7 +5,8 @@ class Client_Soft_Params_Dfd1(object):
     """
     """
     modelType = "产品质量软测量"
-    modelName = "质量软测量_2#B_test1"
+    # modelName = "质量软测量_2#B_test1"
+    modelName = "test1"
     modelNames = ["质量软测量_2#B", "质量软测量_2#B_test1"]
 
     trainDsName = "多氟多_2#_质量软测#训练数据"

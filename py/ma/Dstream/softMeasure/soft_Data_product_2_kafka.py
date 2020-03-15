@@ -120,8 +120,8 @@ def send_data_2_kafka(df):
         f"{row['SETPOINT04_F03']}," \
         f"{row['BFIC_3002_F03_MV']}"
 
-        producer.send('ma16_src_soft_measure', msg)
-        time.sleep(1)
+        producer.send(conf.KAFKA_SOFT_SRC_TOPIC, msg)
+        time.sleep(5)
 
 
 if __name__ == '__main__':

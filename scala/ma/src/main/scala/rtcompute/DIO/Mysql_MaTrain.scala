@@ -34,10 +34,11 @@ object Mysql_MaTrain {
 				" a.trainDir trainDir, a.trainState trainState" +
 				" FROM  ma_train a, ma_data_source b " +
 //				" WHERE  a.dsId=b.id AND a.trainState=0  AND  a.id=2" +
-				" WHERE  a.dsId=b.id AND a.trainState=0 AND a.modelType='优化分析'" +
+				" WHERE  a.dsId=b.id AND a.trainState=0 " +
 				" ORDER BY a.id "
 			println(s"[${Utils.now()}]: [get_undo_tasks.sql]=======> $sql")
 
+			// AND a.modelType='生产预警分析'
 			val rs: ResultSet = statement.executeQuery(sql)
 			while (rs.next) {
 
