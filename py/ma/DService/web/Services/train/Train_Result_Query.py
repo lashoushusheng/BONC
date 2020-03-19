@@ -118,7 +118,7 @@ class Train_Query_Result_Handler(DataServiceBaseHandler):
             mylog.debug(data)
             self.write(data)
 
-        elif trainRow.modelType == "生产预警分析":
+        elif trainRow.modelType == "生产预警分析" or trainRow.modelType == "三次平滑指数预警分析":
             if trainRow.trainState == 0 or trainRow.trainState == 1:
                 predictSucessSta = None
                 TimeSeq = None

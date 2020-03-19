@@ -18,9 +18,11 @@ object greypredict_demo {
   Logger.getLogger("org.apache.hadoop").setLevel(Level.WARN)
 
   def main(args: Array[String]): Unit = {
-    val conf: SparkConf = new SparkConf().set("spark.driver.memory", "2g")
+    val conf: SparkConf = new SparkConf()
+      .set("spark.driver.memory", "2g")
       .set("spark.executor.memory", "2g")
       .setAppName("KAD").setMaster("local[*]")
+
     val spark: SparkSession = SparkSession.builder().config(conf).getOrCreate()
     import spark.implicits._
 

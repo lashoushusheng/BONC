@@ -104,7 +104,7 @@ App_kafka_2mqtt_PY=${App_dstream_opt_Path}/${App_kafka_2mqtt}.py
 App_kafka_2mqtt_OUT=${Out_Dir}/${App_kafka_2mqtt}_${ymd}.py
 
 # 【train】 训练
-App_train=maTrain_opt
+App_train=maTrain
 App_train_JAR=${App_train_Path}/${App_train}.jar
 App_train_OUT=${Out_Dir}/${App_train}_${ymd}.out
 

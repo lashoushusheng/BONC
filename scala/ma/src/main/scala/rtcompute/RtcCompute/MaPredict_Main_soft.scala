@@ -65,6 +65,7 @@ object MaPredict_Main_soft {
 
     //    加载多个模型
     Mysql_MaPredict.predictUndoList.clear()
+    // args(0):modelType  args(1)...args(n):modelNames
     Mysql_MaPredict.get_undo_tasks(args)
 
 //    Mysql_MaPredict.predictUndoList.foreach(

@@ -1,7 +1,7 @@
 package rtcompute.RtcCompute
 
 import com.bonc.interfaceRaw.IBGA_Model_5
-import com.bonc.models.GM_11_APP
+import com.bonc.models.{GM_11_APP, Holt_Winters}
 //import InterfaceRaw.{IBGA_Model, IBGA_Model_5}
 import com.bonc.models.OptimizationGuidance_bdapp_5
 import com.bonc.models.BoncRegression_app_5
@@ -26,7 +26,8 @@ object MaTrain_Process {
 		val SOFT_Model:IBGA_Model_5[Row] = new BoncRegression_app_5().asInstanceOf[IBGA_Model_5[Row]]
 		// （生产预警API）构造类对象
 		val GM: IBGA_Model_5[Row] = new GM_11_APP().asInstanceOf[IBGA_Model_5[Row]] //构造类对象
-
+		// （三次平滑指数预警分析）构造类对象
+		val Holt_Winter: IBGA_Model_5[Row] = new Holt_Winters().asInstanceOf[IBGA_Model_5[Row]] //构造类对象
 		// （训练参数）- 数据源文件.
 //		val vDSDir = "E:\\code\\Athena\\taurus_开发_测试\\项目6_模型分析16\\2-2（魏工）jar包_1022\\jar包和数据_20191022"
 //		val vDSFile = s"$vDSDir/optmodel_0813.csv"
@@ -56,6 +57,7 @@ object MaTrain_Process {
 				case "优化分析" => ret = OG_Model.train_task_commit(vDSFile, vTrainParam, vTrainSavePath)
 				case "产品质量软测量" => ret = SOFT_Model.train_task_commit(vDSFile, vTrainParam, vTrainSavePath)
 				case "生产预警分析" => ret = GM.train_task_commit(vDSFile, vTrainParam, vTrainSavePath)
+				case "三次平滑指数预警分析" => ret = Holt_Winter.train_task_commit(vDSFile, vTrainParam, vTrainSavePath)
 				case _ => println("未匹配到模型")
 			}
 			// 打印.调试.

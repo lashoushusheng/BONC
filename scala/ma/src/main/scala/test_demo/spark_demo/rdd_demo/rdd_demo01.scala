@@ -8,16 +8,20 @@ object rdd_demo01 {
     val config: SparkConf = new SparkConf()
       .setMaster("local[*]")
       .setAppName("demo01")
-      .set("spark.default.parallelism","3")
+      .set("spark.default.parallelism","16")
 
 
     val sc = new SparkContext(config)
 
-    val listRDD: RDD[Int] = sc.makeRDD(List(1,2,3,4))
+    val listRDD: RDD[Int] = sc.makeRDD(1 to 10)
 
-    listRDD.collect().foreach(println)
+    val tupleRDD: RDD[(Int, String)] = listRDD.mapPartitionsWithIndex {
+      case (num, datas) => {
+        datas.map((_, "num:" + num))
+      }
+    }
 
-    listRDD.saveAsTextFile("output")
+    tupleRDD.collect().foreach(println)
   }
 
 }

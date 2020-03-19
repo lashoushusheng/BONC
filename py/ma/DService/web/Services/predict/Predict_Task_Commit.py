@@ -43,7 +43,7 @@ class Predict_Commit_Task_Handler(DataServiceBaseHandler):
         )
         if row:
             # 记录已存在,直接计算
-            self.start_predict_compute(reqDict["modelName"])
+            self.start_predict_compute(reqDict.get('modelType'), reqDict.get('modelName'))
             return
 
         # [Mysql]，取[ma_data_source]数据源记录.
@@ -102,9 +102,9 @@ class Predict_Commit_Task_Handler(DataServiceBaseHandler):
             }))
             return
 
-        self.start_predict_compute(reqDict["modelName"])
+        self.start_predict_compute(reqDict.get('modelType'), reqDict.get('modelName'))
 
-    def start_predict_compute(self, modelName):
+    def start_predict_compute(self, modelType, modelName):
         # 检查当前是否有任务在执行
         val = os.popen('jps | grep maPredict | wc -l').read()  # 执行结果包含在val中
         if int(val) > 0:
@@ -114,9 +114,7 @@ class Predict_Commit_Task_Handler(DataServiceBaseHandler):
             }))
             return
 
-        # res = os.system(f"nohup java -cp {conf.OPT_PREDICT_JAR_DIR} rtcompute.RtcCompute.MaPredict_Main_opt {
-        # modelName} > /root/works/ibin/ma16_out/MaPredict_Main_opt>&1 &")
-        res = os.system(f"nohup java -jar {conf.PREDICT_JAR_DIR}/{conf.PREDICT_JAR_NAME}.jar {modelName} > {conf.PREDICT_OUT} 2>&1 &")
+        res = os.system(f"nohup java -jar {conf.PREDICT_JAR_DIR}/{conf.predictTypeDict.get(modelType)}.jar {modelName} > {conf.PREDICT_OUT_DIR}/{conf.predictTypeDict.get(modelType)} 2>&1 &")
         if res == 0:
             self.write(json.dumps({
                 "errorNo": 0,

@@ -17,10 +17,12 @@ object MaTrain_Main {
 		val spark: SparkSession = SparkSession.builder()
 			.master("local[*]")
 			.appName("MAnalysis_train")
+//  		.config("spark.default.parallelism","16")
 			.getOrCreate()
 
 		val sc: SparkContext = spark.sparkContext
 		sc.setLogLevel(GlobalParams.sys_log_level)
+//		sc.setLogLevel("info")
 
 
 		while(true){

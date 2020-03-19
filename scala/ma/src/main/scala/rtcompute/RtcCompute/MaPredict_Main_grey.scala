@@ -15,11 +15,10 @@ import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 import org.apache.spark.streaming.kafka010.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import rtcompute.DPublic.{KafkaSink, Utils}
-
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 import org.apache.spark.rdd.RDD
 
-case class predictRes(time:String, prediction:String)
+import scala.collection.mutable.ArrayBuffer
 
 object MaPredict_Main_grey {
 
@@ -30,7 +29,7 @@ object MaPredict_Main_grey {
 
     // [Spark], 参数设置.
     val spark: SparkSession = SparkSession.builder()
-      .master("local[2]")
+      .master("local[*]")
       .appName("MAnalysis_Predict")
       .getOrCreate()
 
@@ -39,9 +38,8 @@ object MaPredict_Main_grey {
     val sc: SparkContext = spark.sparkContext
     sc.setLogLevel(GlobalParams.sys_log_level)
 
-//    Seconds(GlobalParams.spark_stream_interval_seconds
     val ssc = new StreamingContext(
-      sc, Seconds(3)
+      sc, Seconds(GlobalParams.grey_interval_seconds)
     )
 
     // [kafka_Producer], 创建, 计算结果输出.
@@ -73,12 +71,12 @@ object MaPredict_Main_grey {
     Mysql_MaPredict.predictUndoList.clear()
     Mysql_MaPredict.get_undo_tasks(args)
 
-    Mysql_MaPredict.predictUndoList.foreach(
-      x => {
-        MaPredict_Process.loadModel_GM(x)
-//        MaPredict_Process.process(src_GM.collect(), x.modelType)
-      }
-    )
+//    Mysql_MaPredict.predictUndoList.foreach(
+//      x => {
+//        MaPredict_Process.loadModel_GM(x)
+////        MaPredict_Process.process(src_GM.collect(), x.modelType)
+//      }
+//    )
 
     // [kafka], 取数据流.
     var dStream:DStream[String] = null
@@ -86,33 +84,35 @@ object MaPredict_Main_grey {
 //    dStream.print()
 
     dStream.foreachRDD(rdd =>{
-      if (rdd.count() >= 15 ){
+      if (rdd.count() >= GlobalParams.grey_history_datalength ){
         val rowsRDD: RDD[Row] = rdd.map(_.split(",")).filter(x => x.length==2)
           .map(t => Row(t(0),t(1).toDouble))
 
         val df: DataFrame = spark.createDataFrame(rowsRDD,Schema.grey_schema)
         //				df.show()
-
+        var resultList = new ArrayBuffer[String]()
         Mysql_MaPredict.predictUndoList.foreach(
           x =>{
+            MaPredict_Process.loadModel_GM(x)
             val res: Row = MaPredict_Process.process(df.collect(), x.modelType)
 
             var result = ""
             if(res.getAs[Int](0) == 0){
               result = res.getAs[DataFrame](1).toJSON.collectAsList.toString
-              val msg: String = Array(result,x.modelName).mkString("##")
+              val msg: String = Array(x.modelName,result).mkString("##")
               println(msg)
-              kafkaProducer.value.send(
-                GlobalParams.kafka_rtc_result_topic_grey,
-                value = msg
-              )
+              resultList.append(msg)
             }
           }
         )
 
+        kafkaProducer.value.send(
+          GlobalParams.kafka_rtc_result_topic_grey,
+          value = resultList.mkString("**")
+        )
       }
       else{
-        println("数据不足15条，无法计算")
+        println(s"数据不足,无法计算,history_datalength=${GlobalParams.grey_history_datalength}条,实际有${rdd.count()}条")
       }
     })
 

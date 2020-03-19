@@ -19,16 +19,16 @@ class Predict_Current_Task_Stop_Handler(DataServiceBaseHandler):
         mylog.info("[Predict_Commit_Task.Request]...[%s]/[%s]" % (type(reqData), reqData))
 
         # [校验]，请求参数.
-        errno, errMsg, reqDict = Optim_Public.verify_request(
-            reqData=reqData,
-            paramList=["modelType", "modelName"]
-        )
-        mylog.info("[Predict_Commit_Task.Verify]...errno=[%s]...errMsg=[%s]...reqDict=[%s]" % (
-            errno, errMsg, reqDict
-        ))
-        if errno < 0:   # 校验异常，返回.
-            self.write(json.dumps({"errorNo": errno, "errorMsg": errMsg}))
-            return
+        # errno, errMsg, reqDict = Optim_Public.verify_request(
+        #     reqData=reqData,
+        #     paramList=["modelType", "modelName"]
+        # )
+        # mylog.info("[Predict_Commit_Task.Verify]...errno=[%s]...errMsg=[%s]...reqDict=[%s]" % (
+        #     errno, errMsg, reqDict
+        # ))
+        # if errno < 0:   # 校验异常，返回.
+        #     self.write(json.dumps({"errorNo": errno, "errorMsg": errMsg}))
+        #     return
 
         val = os.popen('jps | grep maPredict | wc -l').read()  # 执行结果包含在val中
 

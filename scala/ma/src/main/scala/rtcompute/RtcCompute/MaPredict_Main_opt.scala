@@ -66,13 +66,20 @@ object MaPredict_Main_opt {
 
 		val item: Item_MaPredict = Mysql_MaPredict.get_undo_tasks(args(0))
 		MaPredict_Process.loadModel_OG(item)
+//		val res: Row = MaPredict_Process.process(dfd_src.collect(), item.modelType)
+//		val resultDF: DataFrame =  res.getAs[DataFrame](1)
+//		resultDF.show()
+//		val end = Utils.now()
+//		println(start)
+//		println(end)
 
-//		// [kafka], 取数据流.
+		// [kafka], 取数据流.
 		var dStream:DStream[String] = null
 		dStream = get_stream_from_kafka(ssc)
 //		dStream.print
 
 		dStream.foreachRDD{rdd =>
+			val start: String = Utils.now()
 			val rowsRDD: RDD[Row] = rdd.map(_.split(",")).filter(x => x.length==99)
 				.map(t => Row.fromSeq(t))
 			val df: DataFrame = spark.createDataFrame(rowsRDD,Schema.dfd_schema)
@@ -92,29 +99,33 @@ object MaPredict_Main_opt {
 					value = msg
 				)
 			}
+			val end: String = Utils.now()
+			println("start time: "+ start)
+			println("end time: "+ end)
 		}
+
 		// [Spark].
 		ssc.start()
-//		ssc.awaitTermination()
+		ssc.awaitTermination()
 		//检查间隔毫秒
-		val checkIntervalMillis = 10000
-		var isStopped = false
-		while (!isStopped) {
-			println("calling awaitTerminationOrTimeout")
-			isStopped = ssc.awaitTerminationOrTimeout(checkIntervalMillis)
-			if (isStopped) {
-				println("confirmed! The streaming context is stopped. Exiting application...")
-			} else {
-				println("Streaming App is still running. Timeout...")
-			}
-			//判断文件夹是否存在
-			checkShutdownMarker
-			if (!isStopped && stopFlag) {
-				println("stopping ssc right now")
-				ssc.stop(true, false)
-				println("ssc is stopped!!!!!!!")
-			}
-		}
+//		val checkIntervalMillis = 10000
+//		var isStopped = false
+//		while (!isStopped) {
+//			println("calling awaitTerminationOrTimeout")
+//			isStopped = ssc.awaitTerminationOrTimeout(checkIntervalMillis)
+//			if (isStopped) {
+//				println("confirmed! The streaming context is stopped. Exiting application...")
+//			} else {
+//				println("Streaming App is still running. Timeout...")
+//			}
+//			//判断文件夹是否存在
+//			checkShutdownMarker
+//			if (!isStopped && stopFlag) {
+//				println("stopping ssc right now")
+//				ssc.stop(true, false)
+//				println("ssc is stopped!!!!!!!")
+//			}
+//		}
 	}
 
 	def checkShutdownMarker: AnyVal = {

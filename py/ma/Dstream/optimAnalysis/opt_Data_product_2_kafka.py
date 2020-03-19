@@ -121,7 +121,7 @@ def send_data_2_kafka(df):
         f"{row['BFIC_3002_F03_MV']}"
 
         producer.send(conf.KAFKA_OPT_SRC_TOPIC, msg)
-        time.sleep(3)
+        time.sleep(5)
 
 
 if __name__ == '__main__':

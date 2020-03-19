@@ -126,6 +126,30 @@ class Optim_Public_Train():
                 elif x.get("enCode", None) == "Predict_DataLength":
                     params4ml['Predict_DataLength'] = x.get("enUnit", None)
 
+        elif modelType.find("三次平滑指数") >= 0:
+            optColParams = modelParams[0]
+            adjustParam = modelParams[1]
+
+            # [优化目标]，处理, 根据算法参数处理，适用于只有一个目标
+            for x in optColParams.get("data", []):
+                vKey = x.get("enCode", None)
+                maxvalue = x.get("maxvalue", None)
+                minvalue = x.get("minvalue", None)
+                params4ml['optCol'] = vKey
+                params4ml['maxvalue'] = maxvalue
+                params4ml['minvalue'] = minvalue
+
+            # [可调参数],处理
+            for x in adjustParam.get("data", []):
+                if x.get("enCode", None) == "freq":
+                    params4ml['freq'] = x.get("enUnit", None)
+                elif x.get("enCode", None) == "History_DataLength":
+                    params4ml['History_DataLength'] = x.get("enUnit", None)
+                elif x.get("enCode", None) == "Predict_DataLength":
+                    params4ml['Predict_DataLength'] = x.get("enUnit", None)
+                elif x.get("enCode", None) == "Period":
+                    params4ml['Period'] = x.get("enUnit", None)
+
         # 工况变量
         if observedColParams:
             params4ml['observedCol'] = {}

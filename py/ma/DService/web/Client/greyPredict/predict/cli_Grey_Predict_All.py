@@ -43,15 +43,23 @@ if __name__ == "__main__":
         }
     )
 
-    # [API], 分析任务提交
+    # [API], 停止当前任务
     Cli_Grey_Predict_All.process(
-        urlName="predict_task_commit",
+        urlName="predict_current_task_stop",
         body={
-            "modelType": params.modelType,
-            "modelName": params.modelName,
-            "predictDataSourceName": params.predDsName,
+            "modelType": params.modelType
         }
     )
+
+    # # [API], 分析任务提交
+    # Cli_Grey_Predict_All.process(
+    #     urlName="predict_task_commit",
+    #     body={
+    #         "modelType": params.modelType,
+    #         "modelName": params.modelName,
+    #         "predictDataSourceName": params.predDsName,
+    #     }
+    # )
 
     # # [API], 多个分析任务提交
     # Cli_Grey_Predict_All.process(
@@ -60,26 +68,6 @@ if __name__ == "__main__":
     #         "modelType": params.modelType,
     #         "modelNames": params.modelNames,
     #         "predictDataSourceName": params.predDsName,
-    #     }
-    # )
-
-    # # [API], 查询-分析结果
-    # Cli_Grey_Predict_All.process(
-    #     urlName="predict_query_result",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "modelName": params.modelName,
-    #         "predictDataSourceName": params.predDsName,
-    #     }
-    # )
-
-    # # [API], 查询-多个分析结果
-    # Cli_Grey_Predict_All.process(
-    #     urlName="predict_multiple_query_result",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "modelNames": params.modelNames,
-    #         "predictDataSourceName": params.predDsName
     #     }
     # )
 

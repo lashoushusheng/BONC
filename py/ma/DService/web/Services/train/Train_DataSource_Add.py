@@ -56,10 +56,10 @@ class Train_Add_DataSource_Handler(DataServiceBaseHandler):
             }))
             return
 
-        print("````````````````````````````````````````")
-        print(reqDict.get('dataSourceDir'))
-        print(reqDict.get('paramsFileName'))
-        print("````````````````````````````````````````")
+        # print("````````````````````````````````````````")
+        # print(reqDict.get('dataSourceDir'))
+        # print(reqDict.get('paramsFileName'))
+        # print("````````````````````````````````````````")
 
         # [Mysql]，插入[ma_data_source]记录.
         row = Mysql_MA_DataSource.insert(
