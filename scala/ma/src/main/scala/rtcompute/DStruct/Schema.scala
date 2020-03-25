@@ -21,4 +21,14 @@ object Schema {
       StructField("T11",DoubleType)
     )
   )
+
+  val grey_schema_merge = StructType(
+    Array(
+      StructField("time",StringType),
+      StructField("TI1103A_values",DoubleType),
+      StructField("TI215_values",DoubleType),
+      StructField("TI284_1_values",DoubleType)
+    )
+  )
+
 }

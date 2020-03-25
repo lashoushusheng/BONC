@@ -17,16 +17,14 @@ object MaTrain_Main {
 		val spark: SparkSession = SparkSession.builder()
 			.master("local[*]")
 			.appName("MAnalysis_train")
-//  		.config("spark.default.parallelism","16")
 			.getOrCreate()
 
 		val sc: SparkContext = spark.sparkContext
 		sc.setLogLevel(GlobalParams.sys_log_level)
 //		sc.setLogLevel("info")
 
-
 		while(true){
-			val start = Utils.now()
+			val start: String = Utils.now()
 			Mysql_MaTrain.trainUndoList.clear()
 
 			// [读取], 待处理训练任务.
@@ -43,7 +41,6 @@ object MaTrain_Main {
 					// （算法API）, 训练.
 					val ret: Integer = MaTrain_Process.process(x,x.modelType)
 
-
 					// [ma_train表], 更新-训练状态为(1->2，进行中->已完成).
 					if (ret >= 0){  // 执行成功.
 						Mysql_MaTrain.update_train_state(
@@ -59,7 +56,7 @@ object MaTrain_Main {
 
 			)
 
-			val end = Utils.now()
+			val end: String = Utils.now()
 			println(start)
 			println(end)
 			// 休眠等待n秒.

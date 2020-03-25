@@ -149,33 +149,105 @@ class Optim_Public():
             json.dumps(paramOriDict)
         )
 
+    @classmethod
+    def create_params_json1(cls, fileDir, fileName):
+        """
+            更加数据源参数文件，生成数据源参数Json字符串.
+        """
+        fpath = "%s/%s" % (fileDir, fileName)
 
-    # @classmethod
-    # def create_dataSource_dir(cls, useType, dataSourceName, dataSourceDir, dataFileName, paramsFileName):
-    #     """
-    #         创建数据源目录.
-    #     """
-    #     try:
-    #         # [创建]，[dataSource]数据源目录.
-    #         dsPath = "%s/%s" % (conf.DATA_SOURCE_PATH, dataSourceName)
-    #         if os.path.exists(dsPath) is False:
-    #             os.mkdir(dsPath)
-    #
-    #         # [复制]，数据、参数文件.
-    #         srcDataPath = "%s/%s" % (dataSourceDir, dataFileName)
-    #         destDataPath = "%s/%s" % (dsPath, dataFileName)
-    #         with open(srcDataPath, "rb") as sourceFP:
-    #             with open(destDataPath, "wb") as destFP:
-    #                 destFP.write(sourceFP.read())
-    #
-    #         if useType == 1:  # 模型训练，需要参数文件.
-    #             srcParamsPath = "%s/%s" % (dataSourceDir, paramsFileName)
-    #             destParamPath = "%s/%s" % (dsPath, paramsFileName)
-    #             with open(srcParamsPath, "rb") as sourceFP:
-    #                 with open(destParamPath, "wb") as destFP:
-    #                     destFP.write(sourceFP.read())
-    #
-    #         return 1
-    #     except Exception as e:
-    #         print(traceback.print_exc())
-    #         return None
+        # 判断文件字符集.
+        with open(fpath, "rb") as f:
+            msg = f.read()
+            result = chardet.detect(msg)
+            charset = result['encoding']
+            print("charset...", charset)
+        if charset == 'GB2312':
+            df = pd.read_csv(fpath, engine='python')
+        else:
+            df = pd.read_csv(fpath, engine='python', encoding='utf-8')
+
+        # df = df.dropna(axis=1)     # 删除空行.
+        # df.fillna(0)
+        # 取列名.
+        print("columns.....", df.columns)
+        # print(clm1, type(clm1))
+
+        # 生成参数params字典.
+        paramDict = {}
+        paramOriDict = {}
+
+        # 将列名保存成字典 key：encode，value："enCode\n(英文名)"
+        dfcolumnsDict = {}
+        for item in df.columns.values.tolist():
+            item_encode = item.split("(")[0].strip("\n")
+            dfcolumnsDict[item_encode] = item
+
+        # 遍历行.
+        for i in df.index:
+            df_2_Dict = {}
+            for k, v in dfcolumnsDict.items():
+                df_2_Dict[k] = str(df.loc[i][v]).strip()
+
+            if df_2_Dict.get("enUnit") == "nan":
+                df_2_Dict["enUnit"] = ""
+
+            if not df_2_Dict.get("isParam") or not df_2_Dict.get("belongCate"):
+                continue
+
+            if df_2_Dict.get("isParam") == 'nan' or int(float(df_2_Dict.get("isParam"))) != 1:  # 非空，非参数，跳过
+                continue
+
+            vlist = df_2_Dict.get("belongCate").strip().split("/")
+            if len(vlist) <= 0:  # 空数据，跳过.
+                continue
+
+            for x in vlist:
+                vv = paramDict.get(str(x), [])
+                if str(x) == "optCol":
+                    vv.append({
+                        "cnCode": df_2_Dict.get("cnCode"),
+                        "enCode": df_2_Dict.get("enCode"),
+                        "enUnit": df_2_Dict.get("enUnit"),
+                        "maxvalue": df_2_Dict.get("maxvalue"),
+                        "minvalue": df_2_Dict.get("minvalue"),
+                        "freq": df_2_Dict.get("freq", 0)
+                    })
+
+                    # 插入原始列表.
+                    paramOriDict[df_2_Dict.get("enCode")] = {
+                        "cnCode": df_2_Dict.get("cnCode"),
+                        "enCode": df_2_Dict.get("enCode"),
+                        "enUnit": df_2_Dict.get("enUnit"),
+                        "maxvalue": df_2_Dict.get("maxvalue"),
+                        "minvalue": df_2_Dict.get("minvalue"),
+                        "freq": df_2_Dict.get("freq", 0)
+                    }
+
+                else:
+                    vv.append({
+                        "cnCode": df_2_Dict.get("cnCode"),
+                        "enCode": df_2_Dict.get("enCode"),
+                        "enUnit": df_2_Dict.get("enUnit")
+                    })
+
+                    # 插入原始列表.
+                    paramOriDict[df_2_Dict.get("enCode")] = {
+                        "cnCode": df_2_Dict.get("cnCode"),
+                        "enCode": df_2_Dict.get("enCode"),
+                        "enUnit": df_2_Dict.get("enUnit")
+                    }
+                # 插入列表.
+                paramDict[x] = vv
+
+        if paramDict is None:
+            return None
+
+        # 打印调试.
+        print("paramDict......", json.dumps(paramDict))
+        print("paramOriDict......", json.dumps(paramOriDict))
+
+        return (
+            json.dumps(paramDict),
+            json.dumps(paramOriDict)
+        )

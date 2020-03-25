@@ -51,6 +51,7 @@ object GlobalParams {
 	* * * * * * *  * * * * * * *  * * * * * * */
 	val sysSection:Section = ini.get("sys")
 	val sys_log_level:String = sysSection.get("SYS_LOG_LEVEL").trim
+	val sys_log_dir:String = sysSection.get("SYS_LOG_DIR").trim
 
 	println(s"sys_log_level......$sys_log_level")
 

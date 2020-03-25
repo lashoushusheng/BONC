@@ -42,7 +42,7 @@ class Train_Add_DataSource_Handler(DataServiceBaseHandler):
             return
 
         # [生成], 参数json.
-        (paramsJson, paramOriJson) = Optim_Public.create_params_json(
+        (paramsJson, paramOriJson) = Optim_Public.create_params_json1(
             fileDir= reqDict.get('dataSourceDir'),
             fileName= reqDict.get('paramsFileName')
         )

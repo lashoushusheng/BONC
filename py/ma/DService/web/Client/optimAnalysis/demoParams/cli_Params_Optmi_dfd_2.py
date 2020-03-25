@@ -5,7 +5,7 @@ class Cli_Optmi_Params_Dfd_2():
     """
     """
     modelType = "优化分析"
-    modelName = "多氟多2点_all"
+    modelName = "2#三项单耗优化"
 
     trainDsName = "多氟多2点_训练数据"
     trainDsDesc = "多氟多2点_训练数据，训练测试"

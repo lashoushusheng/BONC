@@ -1,8 +1,3 @@
-predictNameDict = {
-    "优化分析": "maPredict_opt_stream",
-    "产品质量软测量": "maPredict_soft_stream",
-    "生产预警分析": "maPredict_grey_stream",
-    "三次平滑指数预警分析": "maPredict_holtWinters_stream"
-}
+import pandas as pd
 
-print(predictNameDict.get("三次平滑指数预警分"))
+df = pd.read_csv("/root/works/idata/ma16_data/生产预警分析/TI284_1塔顶温度-test/train_result/predictSucessSta/part-00000-6bb923c0-9e9b-443c-aa1d-5ce9b9a21536-c000.csv", engine='python')

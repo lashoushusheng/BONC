@@ -85,10 +85,10 @@ object MaPredict_Main_grey {
 
     dStream.foreachRDD(rdd =>{
       if (rdd.count() >= GlobalParams.grey_history_datalength ){
-        val rowsRDD: RDD[Row] = rdd.map(_.split(",")).filter(x => x.length==2)
-          .map(t => Row(t(0),t(1).toDouble))
+        val rowsRDD: RDD[Row] = rdd.map(_.split(",")).filter(x => x.length==4)
+          .map(t => Row(t(0),t(1).toDouble,t(2).toDouble,t(3).toDouble))
 
-        val df: DataFrame = spark.createDataFrame(rowsRDD,Schema.grey_schema)
+        val df: DataFrame = spark.createDataFrame(rowsRDD,Schema.grey_schema_merge)
         //				df.show()
         var resultList = new ArrayBuffer[String]()
         Mysql_MaPredict.predictUndoList.foreach(
@@ -106,10 +106,10 @@ object MaPredict_Main_grey {
           }
         )
 
-        kafkaProducer.value.send(
-          GlobalParams.kafka_rtc_result_topic_grey,
-          value = resultList.mkString("**")
-        )
+//        kafkaProducer.value.send(
+//          GlobalParams.kafka_rtc_result_topic_grey,
+//          value = resultList.mkString("**")
+//        )
       }
       else{
         println(s"数据不足,无法计算,history_datalength=${GlobalParams.grey_history_datalength}条,实际有${rdd.count()}条")

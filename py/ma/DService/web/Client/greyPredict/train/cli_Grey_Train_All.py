@@ -1,5 +1,7 @@
 from DService.web.Client.cli_Public import Client_Public
 from DService.web.Client.greyPredict.demoParams.cli_Params_Grey_test import cli_Params_Grey_test
+from DService.web.Client.greyPredict.demoParams.cli_Params_Grey_merge import cli_Params_Grey_merge
+
 from CConfig import conf
 
 
@@ -13,12 +15,8 @@ class Cli_Grey_Train_All():
         #     conf.DATA_SERVICE_IP, conf.DATA_SERVICE_PORT, modelType, urlName
         # )
 
-        # url = "http://%s:%s/analysis_api/v1/%s/%s" % (
-        #     "demo.shenzhuo.vip", 23508, modelType, urlName
-        # )
-
         url = "http://%s:%s/analysis_api/v1/%s/%s" % (
-            "49.233.5.174", 7752, modelType, urlName
+            "bj.s1.6net.plus", 7752, modelType, urlName
         )
 
         print("url...", url)
@@ -30,7 +28,8 @@ class Cli_Grey_Train_All():
 
 if __name__ == "__main__":
     # [参数]
-    params = cli_Params_Grey_test
+    # params = cli_Params_Grey_test
+    params = cli_Params_Grey_merge
 
     # # [API]，添加-数据源
     # Cli_Grey_Train_All.process(

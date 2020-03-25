@@ -15,8 +15,12 @@ class Cli_Optmi_Train_All():
         """
         """
         modelType = "optimAnalysis"
+        # url = "http://%s:%s/analysis_api/v1/%s/%s" % (
+        #     conf.DATA_SERVICE_IP, conf.DATA_SERVICE_PORT, modelType, urlName
+        # )
+
         url = "http://%s:%s/analysis_api/v1/%s/%s" % (
-            conf.DATA_SERVICE_IP, conf.DATA_SERVICE_PORT, modelType, urlName
+            "xx.s1.6net.plus", 7752, modelType, urlName
         )
         print("url...", url)
 
@@ -41,7 +45,7 @@ if __name__ == "__main__":
     # params = Cli_Optmi_Params_Cjyyh1
     # params = Cli_Optmi_Params_Cjyyh2
     # [参数]，多氟多
-    params = Cli_Optmi_Params_Dfd_1
+    params = Cli_Optmi_Params_Dfd_2
     # [参数]，高安屯
     # params = Cli_Optmi_Params_Gat1
     # [参数]，美腾
@@ -77,16 +81,16 @@ if __name__ == "__main__":
     #     }
     # )
 
-    # [API], 保存-模型
-    Cli_Optmi_Train_All.process(
-        urlName="train_save_model",
-        body={
-            "modelType": params.modelType,
-            "dataSourceName": params.trainDsName,
-            "modelName": params.modelName,
-            "modelParams": params.inputParams
-        }
-    )
+    # # [API], 保存-模型
+    # Cli_Optmi_Train_All.process(
+    #     urlName="train_save_model",
+    #     body={
+    #         "modelType": params.modelType,
+    #         "dataSourceName": params.trainDsName,
+    #         "modelName": params.modelName,
+    #         "modelParams": params.inputParams
+    #     }
+    # )
 
     # # [API], 获取-模型名称列表
     # Cli_Optmi_Train_All.process(
@@ -106,21 +110,14 @@ if __name__ == "__main__":
     # )
 
     # [API], 查询-训练结果
-    # Cli_Optmi_Train_All.process(
-    #     urlName="train_query_result",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "modelName": params.modelName
-    #     }
-    # )
+    Cli_Optmi_Train_All.process(
+        urlName="train_query_result",
+        body={
+            "modelType": params.modelType,
+            "modelName": params.modelName
+        }
+    )
 
-    # [API], 导出-训练结果
-    # Cli_Optmi_Train_All.process(
-    #     urlName="train_export_result",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "modelName": params.modelName
-    #     }
-    # )
+
 
 

@@ -3,7 +3,6 @@ from DService.web.Client.cli_Public import Client_Public
 from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd import Client_Soft_Params_Dfd1
 from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_MT1 import Client_Soft_Params_MT1
 
-
 class Cli_Optmi_Predict_All():
     @classmethod
     def process(cls, urlName, body):

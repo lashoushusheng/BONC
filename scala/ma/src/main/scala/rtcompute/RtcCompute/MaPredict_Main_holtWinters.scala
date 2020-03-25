@@ -15,6 +15,7 @@ import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import rtcompute.DIO.Mysql_MaPredict
 import rtcompute.DPublic.{KafkaSink, Utils}
+import rtcompute.DPublic.logger.logger
 import rtcompute.DStruct.{GlobalParams, Schema}
 
 import scala.collection.mutable.ArrayBuffer

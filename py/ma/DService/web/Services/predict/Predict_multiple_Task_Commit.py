@@ -132,7 +132,7 @@ class Predict_Commit_multiple_Task_Handler(DataServiceBaseHandler):
             }))
             return
 
-        res = os.system(f"nohup java -jar {conf.PREDICT_JAR_DIR}/{conf.predictTypeDict.get(modelType)}.jar {modelType} {modelNames_2_str} > {conf.PREDICT_OUT_DIR}/{conf.predictTypeDict.get(modelType)} 2>&1 &")
+        res = os.system(f"nohup java -jar {conf.PREDICT_JAR_DIR}/{conf.predictTypeDict.get(modelType)}.jar {modelType} {modelNames_2_str} > {conf.PREDICT_OUT_DIR}/{conf.predictTypeDict.get(modelType)}.out 2>&1 &")
         if res == 0:
             self.write(json.dumps({
                 "errorNo": 0,

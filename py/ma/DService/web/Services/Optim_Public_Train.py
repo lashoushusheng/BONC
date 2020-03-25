@@ -5,6 +5,7 @@ import os
 import shutil
 import traceback
 import pandas as pd
+from pandas.errors import *
 
 from CConfig import conf
 
@@ -108,14 +109,14 @@ class Optim_Public_Train():
             optColParams = modelParams[0]
             adjustParam = modelParams[1]
 
-            # [优化目标]，处理, 根据算法参数处理，适用于只有一个目标
+            params4ml['optCol'] = {}  # 字典.
             for x in optColParams.get("data", []):
                 vKey = x.get("enCode", None)
-                maxvalue = x.get("maxvalue", None)
-                minvalue = x.get("minvalue", None)
-                params4ml['optCol'] = vKey
-                params4ml['maxvalue'] = maxvalue
-                params4ml['minvalue'] = minvalue
+                params4ml['optCol'][vKey] = {
+                    "maxvalue": x.get("maxvalue", None),
+                    "minvalue": x.get("minvalue", None),
+                    "freq": x.get("freq", None),
+                }
 
             # [可调参数],处理
             for x in adjustParam.get("data", []):
@@ -186,9 +187,14 @@ class Optim_Public_Train():
         resultPath = "%s/%s" % (fileDir, fname)
         mylog.info("resultPath...........{}".format(resultPath))
         # pandas.dataFrame.
-        df = pd.read_csv(resultPath, engine='python')
+        try:
+            df = pd.read_csv(resultPath, engine='python')
+        except EmptyDataError:
+            return {}
 
         # df.rename(columns={'A(%)': 'A'}, inplace = True)
+        if df.empty:
+            dataJsonDcit = {}
 
         dataJsonStr = df.to_json(
             force_ascii=False
@@ -205,24 +211,4 @@ class Optim_Public_Train():
         mylog.debug("...{}...".format(type(dataJsonDcit)), dataJsonDcit)
         return dataJsonDcit
 
-    @classmethod
-    def save_train_result_2_csv(cls, fileDir, modelName, mylog):
-        """
-        """
-        fname = None
-        for file in os.listdir(fileDir):
-            print(".........", file)
-            if os.path.splitext(file)[-1] == ".csv":
-                fname = file
-                break
-        if fname is None:
-            mylog.info("Could not find fname={} error.".format(fname))
 
-        resultPath = "%s/%s" % (fileDir, fname)
-        mylog.info("resultPath...........{}".format(resultPath))
-        # pandas.dataFrame.
-        df = pd.read_csv(resultPath, engine='python').rename(columns={"gw_id": "工况"}).drop(['concat_col_gw', 'op'],
-                                                                                           axis=1)
-        # print(df)
-        df.to_csv(f"/root/works/web/bigdata-algorithm/apache-tomcat-7.0.78/webapps/algorithm/trainResult/{modelName}_训练结果.csv", index=False)
-        return f"algorithm/trainResult/{modelName}_训练结果.csv"
