@@ -125,8 +125,10 @@ def send_data_2_kafka(df):
 
 
 if __name__ == '__main__':
-    df = pd.read_csv("/root/works/idata/ma16_data/origin_data/产品质量软测量/predic_data/2号软测量预测数据.csv")
+    # df = pd.read_csv("/root/works/idata/ma16_data/origin_data/产品质量软测量/predic_data/2号软测量预测数据.csv")
+    df = pd.read_csv("/root/works/src/BONC/app16/py/ma/Data/softmeasure/soft_test_data.csv")
     # print(df)
 
     while True:
         send_data_2_kafka(df)
+

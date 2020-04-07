@@ -5,6 +5,7 @@ import java.io.File
 import org.ini4j.Config
 import org.ini4j.Ini
 import org.ini4j.Profile.Section
+import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType}
 
 /*
 	全局参数.
@@ -99,6 +100,15 @@ object GlobalParams {
   val grey_interval_seconds:Int = sparkSection.get("GREY_INTERVAL_SECONDS").toInt
 	val windowDuration:Int = sparkSection.get("WINDOWDURATION").toInt
 	val slideDuration:Int = sparkSection.get("SLIDEDURATION").toInt
+
+	/* * * * * * *  * * * * * * *  * * * * * * *
+	[Schema].参数.
+	* * * * * * *  * * * * * * *  * * * * * * */
+	val schema:Section = ini.get("schema")
+	val dfd_schemaString: String = schema.get("DFD_SCHEMA")
+
+	val dfd_schema = StructType(dfd_schemaString.split(",")
+		.map(filedName=>StructField(filedName.trim,StringType,nullable = true)))
 
   /* * * * * * *  * * * * * * *  * * * * * * *
     [greyPredict].参数.

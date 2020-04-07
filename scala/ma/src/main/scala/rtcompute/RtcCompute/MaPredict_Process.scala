@@ -4,7 +4,7 @@ import com.bonc.interfaceRaw.IBGA_Model_5
 import com.bonc.models.{GM_11_APP, Holt_Winters}
 //import InterfaceRaw.{IBGA_Model, IBGA_Model_5}
 import org.apache.spark.sql.DataFrame
-import com.bonc.models.OptimizationGuidance_bdapp_5
+import com.bonc.models.OptimizationGuidance_bdapp_8
 import com.bonc.models.BoncRegression_app_5
 import org.apache.spark.sql.Row
 import rtcompute.DStruct.{Item_MaPredict, Item_MaTrain}
@@ -13,7 +13,7 @@ object MaPredict_Process {
 
 	// 优化分析,构造类对象
 	val OG_Model: IBGA_Model_5[Row] =
-		new OptimizationGuidance_bdapp_5().asInstanceOf[IBGA_Model_5[Row]]
+		new OptimizationGuidance_bdapp_8().asInstanceOf[IBGA_Model_5[Row]]
 	// 优化分析,模型加载
 	def loadModel_OG(iItem:Item_MaPredict): Unit ={
 		// （预测参数）- 训练目录

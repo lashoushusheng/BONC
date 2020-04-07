@@ -2,7 +2,8 @@ from DService.web.Services.train import Train_Model_Save, Train_DataSource_Choic
     Train_Model_Params_Get
 from DService.web.Services.train import Train_DataSource_Add, Train_Result_Query
 from DService.web.Services.predict import Predict_Task_Commit, Predict_DataSource_Add, Predict_DataSource_List_Get, \
-    Predict_ModelNameList_Get, Predict_Result_Query, Predict_multiple_Result_Query, Predict_multiple_Task_Commit, Predict_Current_Task_Stop
+    Predict_ModelNameList_Get, Predict_Result_Query, Predict_multiple_Result_Query, Predict_multiple_Task_Commit, \
+    Predict_Current_Task_Stop, Predict_Result_Compare
 
 __all__ = ['urls_pattern']
 
@@ -70,7 +71,8 @@ url_pattern_softMeasure = [
     ('/analysis_api/v1/softMeasure/predict_query_result', Predict_Result_Query.Predict_Query_Result_Handler),
     # [预测] 查询-多个分析结果
     ('/analysis_api/v1/softMeasure/predict_multiple_query_result', Predict_multiple_Result_Query.Predict_Query_multiple_Result_Handler),
-# Predict_Query_multiple_Result_Handler
+    # [预测] 分析值与实测值对比
+    ('/analysis_api/v1/softMeasure/predict_Result_Compare', Predict_Result_Compare.Predict_Compare_Result_Handler),
 ]
 urls_pattern += url_pattern_softMeasure
 

@@ -1,5 +1,6 @@
 from DService.web.Client.cli_Public import Client_Public
-from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd import Client_Soft_Params_Dfd1
+from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd2 import Client_Soft_Params_Dfd2
+from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd1 import Client_Soft_Params_Dfd1
 from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_MT1 import Client_Soft_Params_MT1
 from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_SH1 import Client_Soft_Params_SH1
 from CConfig import conf
@@ -42,51 +43,51 @@ if __name__ == "__main__":
         }
     )
 
-    # # [API], 获取-数据源列表
-    # Cli_Soft_Train_All.process(
-    #     urlName="train_get_dataSource_list",
-    #     body={
-    #         "modelType": params.modelType
-    #     }
-    # )
-    #
-    # # [API], 选中-数据源
-    # Cli_Soft_Train_All.process(
-    #     urlName="train_choiced_dataSource",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "dataSourceName": params.trainDsName,
-    #     }
-    # )
-    #
-    # # [API], 保存-模型
-    # Cli_Soft_Train_All.process(
-    #     urlName="train_save_model",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "dataSourceName": params.trainDsName,
-    #         "modelName": params.modelName,
-    #         "modelParams": params.inputParams
-    #     }
-    # )
-    #
-    # # [API], 获取-模型名称列表
-    # Cli_Soft_Train_All.process(
-    #     urlName="train_get_modelNameList",
-    #     body={
-    #         "modelType": params.modelType
-    #     }
-    # )
-    #
-    # # [API], 获取-模型参数
-    # Cli_Soft_Train_All.process(
-    #     urlName="train_get_modelParams",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "modelName": params.modelName
-    #     }
-    # )
-    #
+    # [API], 获取-数据源列表
+    Cli_Soft_Train_All.process(
+        urlName="train_get_dataSource_list",
+        body={
+            "modelType": params.modelType
+        }
+    )
+
+    # [API], 选中-数据源
+    Cli_Soft_Train_All.process(
+        urlName="train_choiced_dataSource",
+        body={
+            "modelType": params.modelType,
+            "dataSourceName": params.trainDsName,
+        }
+    )
+
+    # [API], 保存-模型
+    Cli_Soft_Train_All.process(
+        urlName="train_save_model",
+        body={
+            "modelType": params.modelType,
+            "dataSourceName": params.trainDsName,
+            "modelName": params.modelName,
+            "modelParams": params.inputParams
+        }
+    )
+
+    # [API], 获取-模型名称列表
+    Cli_Soft_Train_All.process(
+        urlName="train_get_modelNameList",
+        body={
+            "modelType": params.modelType
+        }
+    )
+
+    # [API], 获取-模型参数
+    Cli_Soft_Train_All.process(
+        urlName="train_get_modelParams",
+        body={
+            "modelType": params.modelType,
+            "modelName": params.modelName
+        }
+    )
+
     # # [API], 查询-训练结果
     # Cli_Soft_Train_All.process(
     #     urlName="train_query_result",

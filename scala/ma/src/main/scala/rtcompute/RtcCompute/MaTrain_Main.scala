@@ -11,7 +11,7 @@ object MaTrain_Main {
 
 	def main(args: Array[String]): Unit = {
 
-		// license Authentication
+//		 license Authentication
 //		Authentication.login()
 		// [Spark], 参数设置.
 		val spark: SparkSession = SparkSession.builder()

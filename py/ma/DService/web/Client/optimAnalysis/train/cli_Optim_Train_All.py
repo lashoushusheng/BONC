@@ -20,7 +20,7 @@ class Cli_Optmi_Train_All():
         # )
 
         url = "http://%s:%s/analysis_api/v1/%s/%s" % (
-            "xx.s1.6net.plus", 7752, modelType, urlName
+            "s3.nsloop.com", 22795, modelType, urlName
         )
         print("url...", url)
 

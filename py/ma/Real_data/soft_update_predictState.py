@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd import Client_Soft_Params_Dfd1
+from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd2 import Client_Soft_Params_Dfd1
 from DModel.Mysql_MA_Real_time import Mysql_MA_Real_time
 import time
 import os

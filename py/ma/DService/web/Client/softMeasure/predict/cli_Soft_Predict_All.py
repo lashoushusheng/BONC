@@ -1,6 +1,6 @@
 from CConfig import conf
 from DService.web.Client.cli_Public import Client_Public
-from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd import Client_Soft_Params_Dfd1
+from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_dfd1 import Client_Soft_Params_Dfd1
 from DService.web.Client.softMeasure.demoParams.cli_Params_Soft_MT1 import Client_Soft_Params_MT1
 
 class Cli_Optmi_Predict_All():
@@ -9,9 +9,13 @@ class Cli_Optmi_Predict_All():
         """
         """
         modelType = "softMeasure"
+        # url = "http://%s:%s/analysis_api/v1/%s/%s" % (
+        #     conf.DATA_SERVICE_IP, conf.DATA_SERVICE_PORT, modelType, urlName
+        # )
         url = "http://%s:%s/analysis_api/v1/%s/%s" % (
-            conf.DATA_SERVICE_IP, conf.DATA_SERVICE_PORT, modelType, urlName
+            "s3.nsloop.com", 22795, modelType, urlName
         )
+
         print("url...", url)
 
         # 发送请求.
@@ -24,7 +28,7 @@ if __name__ == "__main__":
     # [parameter]
     # params = Client_Soft_Params_MT1
 
-    # [API], 添加-数据源
+    # # [API], 添加-数据源
     # Cli_Optmi_Predict_All.process(
     #     urlName="predict_add_dataSource",
     #     body={
@@ -35,8 +39,8 @@ if __name__ == "__main__":
     #         "modelType": params.modelType
     #     }
     # )
-    #
-    # [API], 获取-数据源列表
+
+    # # [API], 获取-数据源列表
     # Cli_Optmi_Predict_All.process(
     #     urlName="predict_get_dataSource_list",
     #     body={
@@ -72,14 +76,14 @@ if __name__ == "__main__":
         }
     )
 
-    # # [API],获取-模型名称列表
-    # Cli_Optmi_Predict_All.process(
-    #     urlName="Predict_Get_Model_NameList",
-    #     body={
-    #         "modelType": params.modelType,
-    #         "predictDataSourceName": params.predDsName,
-    #     }
-    # )
+    # [API], 分析值与实测值对比
+    Cli_Optmi_Predict_All.process(
+        urlName="predict_Result_Compare",
+        body={
+            "modelType": params.modelType,
+            "modelNames": params.modelNames
+        }
+    )
 
     # # [API], 查询-分析结果
     # Cli_Optmi_Predict_All.process(

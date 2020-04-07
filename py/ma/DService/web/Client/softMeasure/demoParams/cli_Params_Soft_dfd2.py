@@ -1,7 +1,7 @@
 from CConfig import conf
 
 
-class Client_Soft_Params_Dfd1(object):
+class Client_Soft_Params_Dfd2(object):
     """
     """
     modelType = "产品质量软测量"

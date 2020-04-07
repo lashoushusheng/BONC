@@ -16,7 +16,7 @@ class Cli_Grey_Train_All():
         # )
 
         url = "http://%s:%s/analysis_api/v1/%s/%s" % (
-            "bj.s1.6net.plus", 7752, modelType, urlName
+            "hn.bgp.6net.plus", 35831, modelType, urlName
         )
 
         print("url...", url)

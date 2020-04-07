@@ -3,6 +3,7 @@
 from kafka import KafkaConsumer
 
 from CConfig import conf
+from DModel.Mysql_MA_Result import Mysql_MA_Result
 import paho.mqtt.client as mqtt
 import pandas as pd
 import time
@@ -61,13 +62,38 @@ class soft_Result_Kafka_2_mqtt(object):
         """
         resultList = []
         for item in row.split("**"):
+            # print(item)
             itemDict = {}
             itemList = item.split("##")
-            itemDict["modelName"] = itemList[0]
-            itemDict["data"] = ast.literal_eval(itemList[1])
-            itemDict["modelParams"] = ast.literal_eval(itemList[2])
+            modelName = itemList[0]
+            data = ast.literal_eval(itemList[1])
+            modelParams = ast.literal_eval(itemList[2])
+            # self.result_2_mysql(modelName, data, modelParams)
+
+            itemDict["modelName"] = modelName
+            itemDict["data"] = data
+            itemDict["modelParams"] = modelParams
             resultList.append(itemDict)
         return resultList
+
+    def result_2_mysql(self, modelName, data, modelParams):
+        """
+        function: predict result insert into mysql;
+        :param modelName:
+        :param data:
+        :param modelParams:
+        :return:
+        """
+        optColid = 0
+        if modelParams:
+            print(modelParams[0]['data'][0]['enCode'])
+            if modelParams[0]['data'][0]['enCode'].find("B") >= 0:
+                optColid = 1
+            else:
+                optColid = 2
+
+        for item in data:
+            Mysql_MA_Result.soft_result_insert_2mysql(modelName, optColid, item['time'], item['prediction'])
 
 
 if __name__ == '__main__':

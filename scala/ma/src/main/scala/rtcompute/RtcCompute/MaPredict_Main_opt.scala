@@ -20,7 +20,6 @@ import rtcompute.DPublic.{KafkaSink, Utils}
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 import org.apache.spark.rdd.RDD
 
-
 object MaPredict_Main_opt {
 	val shutdownMarker = "/tmp/spark-test/stop-spark/stop"
 	var stopFlag: Boolean = false
@@ -60,38 +59,39 @@ object MaPredict_Main_opt {
 			)
 		}
 
-		// dfd data sourse
-//		val dfd_src: DataFrame = spark.read.option("header",value = true).csv("/root/works/idata/ma16_data/origin_data/产品质量软测量/predic_data/2号软测量预测数据.csv")
+//		// dfd data sourse
+//		val dfd_src: DataFrame = spark.read.option("header",value = true).csv("/root/works/src/BONC/app16/scala/ma/data/opt/2#多氟多数据聚合去除训练部分.csv")
 //		dfd_src.show()
 
 		val item: Item_MaPredict = Mysql_MaPredict.get_undo_tasks(args(0))
 		MaPredict_Process.loadModel_OG(item)
+
+//		// offline test
 //		val res: Row = MaPredict_Process.process(dfd_src.collect(), item.modelType)
 //		val resultDF: DataFrame =  res.getAs[DataFrame](1)
-//		resultDF.show()
-//		val end = Utils.now()
+//		resultDF.show(1000,truncate = true)
+//		val end: String = Utils.now()
 //		println(start)
 //		println(end)
 
 		// [kafka], 取数据流.
 		var dStream:DStream[String] = null
 		dStream = get_stream_from_kafka(ssc)
-//		dStream.print
+//		dStream.print()
 
 		dStream.foreachRDD{rdd =>
 			val start: String = Utils.now()
-			val rowsRDD: RDD[Row] = rdd.map(_.split(",")).filter(x => x.length==99)
+			val rowsRDD: RDD[Row] = rdd.map(_.split(",")).filter(x => x.length>0)
 				.map(t => Row.fromSeq(t))
-			val df: DataFrame = spark.createDataFrame(rowsRDD,Schema.dfd_schema)
+			val df: DataFrame = spark.createDataFrame(rowsRDD,GlobalParams.dfd_schema)
 
 			val res: Row = MaPredict_Process.process(df.collect(), item.modelType)
 			val ret: Int = res.getAs[Int](0)
 			val resultDF: DataFrame =  res.getAs[DataFrame](1)
-			if(ret == 0 && !resultDF.isEmpty){
+			if(ret == 0 && resultDF.count()!=0){
 				val result: String = resultDF.toJSON.collectAsList.toString
 				val paramOriJson: String = item.paramOriJson
 				val msg: String = Array(result,paramOriJson).mkString("##")
-
 				println(msg)
 
 				kafkaProducer.value.send(
@@ -107,36 +107,6 @@ object MaPredict_Main_opt {
 		// [Spark].
 		ssc.start()
 		ssc.awaitTermination()
-		//检查间隔毫秒
-//		val checkIntervalMillis = 10000
-//		var isStopped = false
-//		while (!isStopped) {
-//			println("calling awaitTerminationOrTimeout")
-//			isStopped = ssc.awaitTerminationOrTimeout(checkIntervalMillis)
-//			if (isStopped) {
-//				println("confirmed! The streaming context is stopped. Exiting application...")
-//			} else {
-//				println("Streaming App is still running. Timeout...")
-//			}
-//			//判断文件夹是否存在
-//			checkShutdownMarker
-//			if (!isStopped && stopFlag) {
-//				println("stopping ssc right now")
-//				ssc.stop(true, false)
-//				println("ssc is stopped!!!!!!!")
-//			}
-//		}
-	}
-
-	def checkShutdownMarker: AnyVal = {
-		if (!stopFlag) {
-			//开始检查hdfs是否有stop-spark文件夹
-			val fs: FileSystem = FileSystem.get(new Configuration())
-			//如果有返回true，如果没有返回false
-			val path = new Path(shutdownMarker)
-			stopFlag = fs.exists(path)
-			fs.delete(path,true)
-		}
 	}
 	/*
   [Kafka]， 数据流.
@@ -165,3 +135,4 @@ object MaPredict_Main_opt {
 		stream.map( x=> x.value())
 	}
 }
+

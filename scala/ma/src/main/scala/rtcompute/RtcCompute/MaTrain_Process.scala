@@ -3,7 +3,7 @@ package rtcompute.RtcCompute
 import com.bonc.interfaceRaw.IBGA_Model_5
 import com.bonc.models.{GM_11_APP, Holt_Winters}
 //import InterfaceRaw.{IBGA_Model, IBGA_Model_5}
-import com.bonc.models.OptimizationGuidance_bdapp_5
+import com.bonc.models.OptimizationGuidance_bdapp_8
 import com.bonc.models.BoncRegression_app_5
 import org.apache.spark.sql.Row
 import rtcompute.DPublic.Utils
@@ -20,7 +20,7 @@ object MaTrain_Process {
 
 		// （优化分析算法API）构造类对象
 		val OG_Model: IBGA_Model_5[Row] =
-			new OptimizationGuidance_bdapp_5().asInstanceOf[IBGA_Model_5[Row]]
+			new OptimizationGuidance_bdapp_8().asInstanceOf[IBGA_Model_5[Row]]
 
 		// （软测量算法API）构造类对象
 		val SOFT_Model:IBGA_Model_5[Row] = new BoncRegression_app_5().asInstanceOf[IBGA_Model_5[Row]]

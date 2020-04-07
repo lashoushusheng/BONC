@@ -30,7 +30,7 @@ object MaPredict_Main_soft {
 
     // [Spark], 参数设置.
     val spark: SparkSession = SparkSession.builder()
-      .master("local[2]")
+      .master("local[*]")
       .appName("MAnalysis_Predict")
       .getOrCreate()
 
@@ -40,7 +40,7 @@ object MaPredict_Main_soft {
     sc.setLogLevel(GlobalParams.sys_log_level)
 
     val ssc = new StreamingContext(
-      sc, Seconds(30)
+      sc, Seconds(GlobalParams.spark_stream_interval_seconds)
     )
 
     // [kafka_Producer], 创建, 计算结果输出.
@@ -59,9 +59,9 @@ object MaPredict_Main_soft {
       )
     }
 
-    // softMeasure data sourse
-    // val src_Soft: DataFrame = spark.read.option("header",value = true).csv("/root/works/idata/ma16_data/origin_data/产品质量软测量/predic_data/2号软测量预测数据.csv")
-    // df.show()
+//     softMeasure data sourse
+//    val src_Soft: DataFrame = spark.read.option("header",value = true).csv("/root/works/src/BONC/app16/py/ma/Data/softmeasure/soft_test_data.csv")
+//    src_Soft.show()
 
     //    加载多个模型
     Mysql_MaPredict.predictUndoList.clear()
@@ -71,6 +71,9 @@ object MaPredict_Main_soft {
 //    Mysql_MaPredict.predictUndoList.foreach(
 //      x => {
 //        MaPredict_Process.loadModel_Soft(x)
+//        val res: Row = MaPredict_Process.process(src_Soft.collect(), x.modelType)
+//        val result: DataFrame = res.getAs[DataFrame](1)
+//        result.show(100,truncate = true)
 //      }
 //    )
 
@@ -83,9 +86,8 @@ object MaPredict_Main_soft {
       val rowsRDD: RDD[Row] = rdd.map(_.split(",")).filter(x => x.length>0)
         .map(t => Row.fromSeq(t))
       val df: DataFrame = spark.createDataFrame(rowsRDD,Schema.dfd_schema)
-//			df.show(20,truncate = false)
       println(df.count())
-      if (!df.isEmpty){
+      if (df.count()!=0){
         var resultList = new ArrayBuffer[String]()
         Mysql_MaPredict.predictUndoList.foreach(
           x =>{

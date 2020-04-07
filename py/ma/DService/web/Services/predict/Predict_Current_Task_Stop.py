@@ -30,6 +30,7 @@ class Predict_Current_Task_Stop_Handler(DataServiceBaseHandler):
         #     self.write(json.dumps({"errorNo": errno, "errorMsg": errMsg}))
         #     return
 
+        # stop
         val = os.popen('jps | grep maPredict | wc -l').read()  # 执行结果包含在val中
 
         if int(val) <= 0:

@@ -32,3 +32,4 @@ if __name__ == '__main__':
     print(df)
     while True:
         send_data_2_kafka(df)
+

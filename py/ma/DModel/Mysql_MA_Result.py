@@ -37,13 +37,26 @@ class Mysql_MA_Result(object):
         db_session.commit()
         return db_session.execute(sql).fetchall()
 
+    @classmethod
+    def soft_result_insert_2mysql(cls,modelName, optColid, time, prediction):
+        """
+        """
+        sql = f"""INSERT INTO soft_predict_result(modelName,optColid,`time`,prediction) VALUES 
+        ('{modelName}',{optColid},'{time}','{prediction}')"""
+        db_session.execute(sql)
+        db_session.commit()
+
+    @classmethod
+    def soft_result_Compare(cls):
+        sql = """SELECT a.modelName,a.time,a.prediction,b.Sample_TestResult,c.test_code FROM 
+        soft_predict_result a,lims_data b,lim_dict c WHERE a.optColid=b.DICTIONARYID AND 
+        b.DICTIONARYID=c.dictionaryid AND  a.time=b.Sampling_Date ORDER BY a.time"""
+        db_session.commit()
+        return db_session.execute(sql).fetchall()
+
 
 if __name__ == '__main__':
-    res = Mysql_MA_Result.find_test()
-
-    print(type(res))
-    print(res[0].modelType, res[0].modelName, res[0].predictDir, res[0].modelParams, res[0].traindsId)
-
-    # for item in res:
-    #     print(item.modelType, item.modelName, item.predictDir, item.modelParams, item.traindsId)
+    res = Mysql_MA_Result.soft_result_Compare()
+    for item in res:
+        print(item.test_code)
 
